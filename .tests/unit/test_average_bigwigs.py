@@ -8,7 +8,7 @@ import polars as pl
 import pytest
 from figwig import BigWigReader, BigWigWriter
 
-from average_bigwigs import main
+from average_bigwigs import finish, main
 
 SIZES = [("chrA", 250), ("chrB", 100)]
 
@@ -138,3 +138,19 @@ def test_contig_length_mismatch_raises(group):
     (tmp_path / "chrom.sizes").write_text("chrA\t251\nchrB\t100\n")
     with pytest.raises(ValueError, match="chrA has 250 bp"):
         run(tmp_path)
+
+
+def test_finish_matches_numpy_round():
+    rng = np.random.default_rng(2)
+    total = np.concatenate(
+        [
+            rng.uniform(-50, 5000, 100_000),
+            np.array([0.0005, 0.0015, 0.0025, 1.2345, -0.0004, 2.0004999, 1e-9]) * 7,
+        ]
+    )
+    for n in (1, 3, 7):
+        out = np.empty(total.size + 5, np.float32)
+        finish(np.concatenate([total, np.zeros(5)]), n, 1000.0, total.size, out)
+        want = (np.round(total / n, 3) + 0.0).astype(np.float32)
+        np.testing.assert_array_equal(out[: total.size], want)
+        assert np.isnan(out[total.size :]).all()

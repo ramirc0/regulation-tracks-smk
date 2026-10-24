@@ -31,6 +31,33 @@ def add(total, values):
         total[i] += values[i]
 
 
+@numba.njit(parallel=True, nogil=True, cache=True)
+def finish(total, n, scale, size, out):
+    """Write the rounded mean of each base into `out`.
+
+    Matches `np.round(total / n, decimals)`, which scales, rounds half to
+    even and unscales. Turns -0.0 into 0.0 and sets bases past `size` to NaN.
+
+    Parameters
+    ----------
+    total : numpy.ndarray of float64
+        Sum of the inputs.
+    n : int
+        Number of inputs.
+    scale : float
+        10 to the power of the decimals kept.
+    size : int
+        Length of the contig. `total` may be longer.
+    out : numpy.ndarray of float32
+        Rounded means, as long as `total`.
+    """
+    for i in numba.prange(total.size):
+        if i < size:
+            out[i] = np.rint(total[i] / n * scale) / scale + 0.0
+        else:
+            out[i] = np.nan
+
+
 def build_parser():
     """Build the average_bigwigs.py command-line parser.
 
@@ -106,6 +133,7 @@ def average(paths, in_tp, sizes, writers, tile, threads, decimals):
     n = {"all": len(paths), "tp": sum(in_tp)}
     longest = -(-max(length.values()) // tile)
     buf = np.empty((longest, tile), np.float32)
+    mean = np.empty(longest * tile, np.float32)
     for chrom, size in sizes:
         k = -(-size // tile)
         starts = np.arange(k, dtype=np.int64) * tile
@@ -119,12 +147,10 @@ def average(paths, in_tp, sizes, writers, tile, threads, decimals):
             if tp and "tp" in sums:
                 add(sums["tp"], values)
         for s, total in sums.items():
-            total /= n[s]
-            np.round(total, decimals, out=total)
-            total += 0.0  # turns -0.0 into 0.0
-            mean = total.astype(np.float32)
-            mean[size:] = np.nan
-            writers[s].write(chrom, starts, mean.reshape(k, tile), missing=np.nan)
+            finish(total, n[s], 10.0**decimals, size, mean[: k * tile])
+            writers[s].write(
+                chrom, starts, mean[: k * tile].reshape(k, tile), missing=np.nan
+            )
 
 
 def main(argv=None):
