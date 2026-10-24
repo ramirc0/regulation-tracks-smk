@@ -1,0 +1,10 @@
+outdir: results
+run_id: test
+pixi_env: default
+
+encode_metadata: resources/metadata
+encode_root: resources/encode
+download_dir: results/encode
+organs: ../../config/organs.tsv
+chrom_sizes: resources/chrom.sizes
+hub_email: test@example.org
