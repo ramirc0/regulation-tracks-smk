@@ -1,0 +1,31 @@
+[workspace]
+name = "regulation-tracks-smk-envs"
+channels = ["conda-forge", "bioconda"]
+platforms = ["linux-64"]
+exclude-newer = "7d"
+
+[dependencies]
+python = "3.12.*"
+numpy = ">=2.3,<3"
+numba = ">=0.62"
+polars = ">=1.43"
+
+[pypi-dependencies]
+# 491d65e carries the writer's zoom false-sharing fix, which 0.1.0 lacks.
+figwig = { git = "https://github.com/jmschrei/figwig.git", rev = "491d65e43b842734c1dbacb1602f31f8dc32d2ba", extras = ["fast"] }
+
+[feature.test.dependencies]
+pytest = ">=8"
+ucsc-bigwiginfo = "*"
+
+[environments]
+test = ["test"]
+
+[exclude-newer]
+ca-certificates = "0d"
+certifi = "0d"
+pip = "0d"
+
+[pypi-exclude-newer]
+certifi = "0d"
+pip = "0d"
