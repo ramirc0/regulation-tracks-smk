@@ -32,9 +32,9 @@ set-resources:              # tune from benchmarks/ TSVs after a real run
   select:
     mem_mb: 16000 * attempt
     runtime: 30m
-  average:
-    mem_mb: 24000 * attempt
-    runtime: 240m
+  average:                  # blood DNase, 482 inputs: 65 min, 11.8 GB
+    mem_mb: 16000 * attempt
+    runtime: 180m
   hub:
     mem_mb: 2000 * attempt
     runtime: 10m

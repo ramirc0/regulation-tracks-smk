@@ -22,4 +22,4 @@ set-threads:
 
 set-resources:              # tune from benchmarks/ TSVs after a real run
   select: {mem_mb: 16000}
-  average: {mem_mb: 24000}
+  average: {mem_mb: 16000}
