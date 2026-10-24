@@ -1,0 +1,48 @@
+# One organ per biosample: the first row, in file order, that matches.
+# slims: ENCODE organ_slims terms. fallback: system_slims or cell slims terms,
+# used when no organ slim matches. pattern: regex on the biosample term name,
+# used last. Row order and colors reproduce UCSC wgEncodeReg4.
+organ	slims	fallback	pattern	color
+blood vessel	blood vessel			255,37,41
+skin	skin of body			127,133,209
+kidney	kidney			92,161,153
+brain	brain	central nervous system,neural cell		155,155,18
+placenta	placenta			104,171,71
+breast	mammary gland,breast			65,171,173
+lung	lung			130,163,45
+large intestine	large intestine,colon			86,86,36
+muscle	musculature of body			137,135,170
+liver	liver			137,152,82
+adipose	adipose tissue			255,119,39
+penis	penis			20,74,159
+prostate	prostate gland			140,140,140
+mouth	mouth			130,141,158
+embryo	embryo,extraembryonic component			118,158,101
+eye	eye			163,127,144
+pancreas	pancreas			175,100,41
+blood	blood	immune system,hematopoietic cell,leukocyte	^GM\d+$	254,75,173
+bone marrow	bone marrow			184,120,120
+esophagus	esophagus			159,131,100
+heart	heart			116,50,165
+nerve	nerve			160,156,0
+nose	nose			181,131,79
+testis	testis			139,140,140
+uterus	uterus			186,111,165
+adrenal gland	adrenal gland			90,179,68
+gallbladder	gallbladder			103,78,167
+lymphoid tissue	lymphoid tissue			130,141,158
+ovary	ovary			161,126,151
+parathyroid gland	paraythroid gland			130,141,158
+small intestine	small intestine			98,98,41
+spinal cord	spinal cord			130,141,158
+spleen	spleen			136,157,97
+stomach	stomach			145,144,99
+thymus	thymus			142,124,195
+thyroid	thyroid gland			27,119,58
+urinary bladder	urinary bladder			194,33,39
+vagina	vagina			255,101,174
+trachea	trachea			194,123,160
+limb	limb			95,88,237
+bone	bone element			121,147,150
+connective tissue	connective tissue			138,135,169
+epithelium	epithelium			221,126,107

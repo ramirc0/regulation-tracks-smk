@@ -17,14 +17,18 @@ snakemake-executor-plugin-slurm = { git = "https://github.com/snakemake/snakemak
 snakemake-executor-plugin-slurm-jobstep = "==0.6.1"
 
 [tasks]
-test = "snakemake --snakefile workflow/Snakefile --directory .tests/integration --profile profiles/local --cores 2 --forceall"
+test-freeze = "snakemake --snakefile workflow/Snakefile --directory .tests/integration --profile profiles/local --cores 2 --forceall freeze"
+test = { cmd = "snakemake --snakefile workflow/Snakefile --directory .tests/integration --profile profiles/local --cores 2 --forceall", depends-on = ["test-freeze"] }
+unit = "pixi run --manifest-path workflow/envs/pixi.toml --environment test pytest .tests/unit"
+# Compares outputs with Gao's hub and the Registry lists on private paths.
+reference = "pixi run --manifest-path workflow/envs/pixi.toml --environment test pytest .tests/reference"
 
 [feature.lint.dependencies]
 ruff = ">=0.16.9,<0.17"
 numpydoc = ">=1.11.0,<2"
 
 [feature.lint.tasks]
-lint = "ruff check && ruff format --check && numpydoc lint workflow/scripts/*.py"
+lint = "ruff check && ruff format --check && numpydoc lint workflow/scripts/*.py scripts/*.py"
 
 [environments]
 lint = { features = ["lint"], no-default-feature = true }
