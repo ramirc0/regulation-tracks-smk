@@ -21,6 +21,8 @@ test-freeze = "snakemake --snakefile workflow/Snakefile --directory .tests/integ
 test = { cmd = "snakemake --snakefile workflow/Snakefile --directory .tests/integration --profile profiles/local --cores 2 --forceall", depends-on = ["test-freeze"] }
 unit = "pixi run --manifest-path workflow/envs/pixi.toml --environment test pytest .tests/unit"
 # Compares outputs with Gao's hub and the Registry lists on private paths.
+# Downloads selected files the mirror lacks. Run after `snakemake freeze`.
+fetch = "pixi run --manifest-path workflow/envs/pixi.toml --environment fetch python scripts/fetch_missing.py"
 reference = "pixi run --manifest-path workflow/envs/pixi.toml --environment test pytest .tests/reference"
 
 [feature.lint.dependencies]

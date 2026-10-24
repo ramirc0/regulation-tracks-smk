@@ -18,8 +18,13 @@ figwig = { git = "https://github.com/jmschrei/figwig.git", rev = "491d65e43b8427
 pytest = ">=8"
 ucsc-bigwiginfo = "*"
 
+# s5cmd serves scripts/fetch_missing.py, which runs outside Snakemake.
+[feature.fetch.dependencies]
+s5cmd = "*"
+
 [environments]
 test = ["test"]
+fetch = ["fetch"]
 
 [exclude-newer]
 ca-certificates = "0d"
