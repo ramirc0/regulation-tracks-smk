@@ -101,7 +101,7 @@ def unchanged_tracks(gao, ours):
             theirs = theirs.filter(pl.col("type").is_in(TP_TYPES))
         name = hub_name(r["set"], r["organ"], r["assay"])
         if set(mine["file"]) == set(theirs["file"]) and name not in DEFECTS:
-            out.append((r["group"], r["file"], name))
+            out.append((r["group"], r["file"], name, r["n"]))
     return out
 
 
@@ -110,16 +110,17 @@ def test_run_matches_hub_where_inputs_are_unchanged(gao, ours):
     if not hub_dir.exists():
         pytest.skip(f"{hub_dir} is missing; run the workflow")
     checked = 0
-    for group, file, name in unchanged_tracks(gao, ours):
+    for group, file, name, n in unchanged_tracks(gao, ours):
         theirs = HUB / "Epigenetics" / "average_bigWig" / f"{name}.bigWig"
         if not theirs.exists():
             continue
         for chrom in CHROMS:
             got, want = read(hub_dir / group / file, chrom), read(theirs, chrom)
-            if name.startswith("tp."):
+            if name.startswith("tp.") and n > 1:
                 np.testing.assert_array_equal(got, want, err_msg=name)
             else:
-                # ave files are bigWigMerge sums over n, unrounded, about 6 digits.
+                # Gao copied single inputs, and his ave files are bigWigMerge sums
+                # over n. Neither is rounded; bigWigMerge keeps about 6 digits.
                 np.testing.assert_allclose(
                     got, want, rtol=1e-5, atol=5e-4, err_msg=name
                 )
