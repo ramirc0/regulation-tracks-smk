@@ -2,10 +2,9 @@ outdir: results
 run_id: 2026-10-24       # outputs go under results/<run_id>/
 pixi_env: default
 
-# encode-metadata-smk snapshot (parquet directory).
-encode_metadata: /home/ramirezc/Projects/encode-metadata-smk/results/2026-10-09/parquets
-encode_root: /data/projects/encode/data          # mirror, <experiment>/<file>.<ext>
+encode_metadata: /path/to/encode-metadata-smk/results/<date>/parquets
+encode_root: /path/to/encode/mirror              # <experiment>/<file>.<ext>
 download_dir: results/encode                     # same layout, for files the mirror lacks
 organs: config/organs.tsv
-chrom_sizes: /data/zusers/ramirezc/static/hg38/genome/GRCh38_no_alt_analysis_set_GCA_000001405.15.chrom.sizes
+chrom_sizes: /path/to/GRCh38_no_alt_analysis_set_GCA_000001405.15.chrom.sizes
 hub_email: you@example.org
