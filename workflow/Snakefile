@@ -1,0 +1,10 @@
+
+include: "rules/common.smk"
+include: "rules/select.smk"
+include: "rules/average.smk"
+include: "rules/hub.smk"
+
+
+rule all:
+    input:
+        f"{HUB}/hub.txt",
